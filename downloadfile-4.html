@@ -1,0 +1,249 @@
+<!doctype html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#eaf6ff"><title>나만의 블록 도전</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#263c74;background:#f3f8ff}button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}[hidden]{display:none!important}
+:root{--navy:#263c74;--pink:#ff709e;--blue:#76b9f5}
+#app{min-height:100dvh;max-width:1120px;margin:auto;background:linear-gradient(180deg,#e6f4ff 0%,#fff7ed 70%,#f2eaff);padding:16px 18px 110px;position:relative;overflow:hidden}
+#app:before{content:"";position:absolute;width:380px;height:380px;right:-190px;top:80px;background:#fff8e0;border-radius:50%;opacity:.65;pointer-events:none}
+.topbar,.hero,.main,.tabs,.bottom-nav{position:relative;z-index:1}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px}.logo{font-size:19px;font-weight:1000;color:#3156a0}.logo-mark{display:inline-flex;align-items:center;justify-content:center;width:39px;height:39px;background:#ffda79;border:3px solid white;border-radius:14px;margin-right:6px;box-shadow:0 4px 0 #e5b971}
+.pill{border:2px solid white;background:#fff;border-radius:22px;padding:10px 13px;color:#5675b1;font-size:12px;font-weight:900;box-shadow:0 4px 0 #d3e4f8}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:16px 0 13px;background:linear-gradient(120deg,#fff9fd,#f6fbff);border:3px solid white;border-radius:27px;padding:14px 17px;box-shadow:0 5px 0 #d9e6f5}.hero h1{font-size:clamp(21px,3vw,30px);letter-spacing:-1px;margin:3px 0;color:#28467f}.hero p{font-size:12px;color:#7a8fb7;font-weight:700;margin:0}.eyebrow{font-size:10px;color:#e98eae;font-weight:1000;letter-spacing:2px}.avatar{width:58px;height:58px;flex:none;background:#ffdfeb;border:3px solid white;border-radius:50%;display:grid;place-items:center;box-shadow:0 3px 0 #eec6d4}
+.tabs{display:flex;gap:8px;margin:0 0 14px;overflow-x:auto;padding:2px 1px 6px}.kid-tab{background:#fff;border:2px solid #fff;border-radius:99px;color:#6679a5;font-weight:900;padding:10px 22px;box-shadow:0 4px 0 #d9e4f2}.kid-tab.selected{background:linear-gradient(#ff9dc1,#ff6e9f);color:white;box-shadow:0 4px 0 #dd6391}
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:17px;align-items:start}.card{background:#ffffffdf;border:3px solid #fff;border-radius:27px;padding:16px;box-shadow:0 7px 0 #cbdcf080,0 12px 28px #5974a51c}.board-card{background:linear-gradient(#eff8ff,#fffdf9);position:relative}.card-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}.card h2{font-size:20px;margin:0;color:#29477e}.smalltag{background:#fff0b7;color:#997331;padding:8px 10px;border-radius:99px;font-size:11px;font-weight:900}
+.scene{height:90px;position:relative;background:linear-gradient(#e5f4ff,#fff7e8);border-radius:20px;margin-bottom:11px;overflow:hidden}.scene:before{content:"";position:absolute;bottom:-42px;left:-10%;width:70%;height:76px;background:#b6e7bb;border-radius:50%}.scene:after{content:"";position:absolute;bottom:-47px;right:-10%;width:65%;height:72px;background:#93d8b1;border-radius:50%}.cloud{position:absolute;top:9px;left:14px;width:62px;height:26px;background:white;border-radius:99px;box-shadow:16px -8px 0 -1px white,28px 0 0 white}.scene .bubble{position:absolute;z-index:2;top:14px;left:100px;right:85px;background:#fff;border-radius:17px;padding:10px 8px;text-align:center;font-size:11px;font-weight:850;color:#48649a;box-shadow:0 3px 0 #dce8f5}.scene .bunny{position:absolute;z-index:3;right:8px;bottom:-12px;width:87px;height:100px}
+.board-wrap{max-width:395px;margin:auto}.board{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));grid-template-rows:repeat(14,minmax(0,1fr));aspect-ratio:10/14;border:6px solid #5077b7;border-radius:14px;overflow:hidden;background:#f7fbff;box-shadow:0 5px 0 #c6d9f2,inset 0 2px 8px #a6c8ed}.cell{border:1px solid #d7e4f6;background:#ffffff48}.cell.filled{box-shadow:inset 3px 3px 0 #ffffff80,inset -3px -3px 0 #00000020}.progressline{display:flex;justify-content:space-between;margin:12px 0 7px;font-size:14px;font-weight:900}.progressbar{height:15px;border-radius:99px;background:#f8e2e9;overflow:hidden}.progressbar>div{height:100%;width:0;background:linear-gradient(90deg,#ff82aa,#ffb8c9);border-radius:99px;transition:width .25s}.board-note{text-align:center;color:#7788ac;font-size:12px;font-weight:800;margin:12px 0}
+.mode-btn{width:100%;border:2px solid #fff;background:#e8e0ff;border-radius:17px;color:#6c56a5;font-size:13px;font-weight:900;padding:11px;box-shadow:0 4px 0 #c9bdea}.mode-btn.on{background:#c5f2dd;color:#367c62}.modeinfo{font-size:11px;color:#8796ae;text-align:center;line-height:1.5}
+.task{display:flex;align-items:center;gap:7px;background:#fff;border:2px solid #f5eff1;border-radius:17px;margin:8px 0;padding:7px;box-shadow:0 3px 0 #eee8ef}.task-icon{background:#fff0d6;border-radius:12px;width:32px;height:34px;flex:none;display:grid;place-items:center;color:#ffae40;font-size:21px}.task input{border:0;outline-color:#d8dafa;min-width:0;flex:1;color:#334a79;font-size:13px;font-weight:800;background:transparent;padding:7px 0}.complete-btn{border:2px solid white;background:linear-gradient(#ff9dbe,#ff6f9d);border-radius:13px;padding:8px;color:#fff;font-weight:950;font-size:12px;white-space:nowrap;box-shadow:0 3px 0 #dc6792}.remove-btn{background:transparent;border:0;color:#b4b4c3;font-size:21px;padding:2px 4px}.add-btn{width:100%;padding:12px;border:2px dashed #d9c8ec;background:#f6f0ff;color:#7e66a2;border-radius:15px;font-weight:900;margin:8px 0}.section-gap{margin-top:24px!important}.settings{display:grid;grid-template-columns:75px 1fr;gap:8px;align-items:center;font-size:12px;font-weight:850}.settings input{width:100%;min-width:0;padding:11px;border-radius:12px;border:2px solid #e9e7f2;background:#fff}.rewardbox{background:#fff0c7;color:#9a7035;border:2px solid white;border-radius:16px;padding:13px;font-size:13px;font-weight:850;margin:12px 0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}.statbox{background:#edf6ff;border:2px solid white;border-radius:15px;text-align:center;padding:13px}.statbox strong{display:block;font-size:22px}.statbox span{font-size:11px;color:#8798b2}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.actions button{flex:1;white-space:nowrap;background:#e9e9ff;border:2px solid white;border-radius:12px;color:#6472a4;font-size:12px;font-weight:850;padding:9px}.hint,.history{font-size:11px;color:#8d9ab1;line-height:1.6}
+.bottom-nav{position:relative;display:flex;justify-content:space-around;max-width:480px;margin:26px auto 0;padding:9px;background:#fff;border:3px solid #fff;border-radius:24px;box-shadow:0 6px 0 #d6dceb,0 10px 24px #4d699c26}.bottom-nav button{background:transparent;border:0;border-radius:13px;padding:8px 10px;font-size:12px;color:#8b98b6;font-weight:850;min-width:62px}.bottom-nav button.active{background:#e8f1ff;color:#3b65a7}.bottom-nav button span{display:block;font-size:21px}.footer{text-align:center;font-size:11px;color:#a3acc2;margin-top:17px}
+#welcome{min-height:100dvh;display:grid;place-items:center;background:radial-gradient(circle at 25% 20%,#d7edff,transparent 45%),radial-gradient(circle at 80% 85%,#ffdddc,transparent 45%),#fff9ed;padding:20px}.welcome-card{width:min(100%,440px);background:#fffaf4;border:4px solid white;border-radius:34px;padding:24px;text-align:center;box-shadow:0 12px 0 #cfe3f7,0 20px 40px #718eac3b}.welcome-card h1{font-size:34px;line-height:1.25;margin:10px 0;color:#3562ac;text-shadow:2px 3px #d8e8ff}.welcome-card p{font-size:14px;color:#7c8caa;line-height:1.7}.welcome-card input{width:100%;border:2px solid #e4e7f0;background:white;border-radius:16px;padding:14px;font-size:17px;text-align:center;margin:12px 0}.primary{width:100%;border:2px solid white;border-radius:18px;background:linear-gradient(#ff9dbf,#ff6b9d);color:#fff;font-size:17px;font-weight:950;padding:15px;box-shadow:0 5px 0 #d8618e}.profile-chip{border:0;background:#f3eaff;border-radius:99px;padding:11px 17px;margin:7px;color:#745d9c;font-weight:850}.welcome-caption{font-size:11px;color:#9ba5b7;margin-top:16px}.welcome-art{display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 0}.welcome-art svg{width:110px;height:130px;filter:drop-shadow(0 6px 0 #d9d1c4)}.welcome-blocks{display:flex;gap:5px;justify-content:center}.welcome-blocks i{display:block;width:30px;height:30px;border-radius:8px;background:#ff9dbd;box-shadow:inset 3px 3px #ffffff80,inset -3px -3px #c95c8245}.welcome-blocks i:nth-child(2){background:#ffc05d}.welcome-blocks i:nth-child(3){background:#82d9c0}.welcome-blocks i:nth-child(4){background:#85bbf5}
+#celebrate{pointer-events:none;position:fixed;z-index:30;top:35%;left:50%;font-size:60px;opacity:0;transform:translate(-50%,-30%) scale(.2)}#celebrate.pop{animation:pop .7s ease-out}@keyframes pop{0%{opacity:0;transform:translate(-50%,-30%) scale(.3)}40%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}100%{opacity:0;transform:translate(-50%,-100%) scale(.8)}}
+@media(max-width:760px){#app{padding:12px 11px 45px}.main{grid-template-columns:1fr}.hero{padding:11px 13px}.hero h1{font-size:22px}.card{padding:13px;border-radius:23px}.board-wrap{max-width:360px}.scene{height:80px}.bottom-nav{margin-top:22px}}
+@media(min-width:761px) and (max-height:850px){.board-wrap{max-width:320px}}
+</style></head><body>
+<svg aria-hidden="true" width="0" height="0" style="position:absolute"><defs>
+<symbol id="rabbit" viewBox="0 0 110 135"><ellipse cx="33" cy="34" rx="15" ry="34" fill="#fff" stroke="#e4d6cc" stroke-width="2" transform="rotate(-12 33 34)"/><ellipse cx="76" cy="34" rx="15" ry="34" fill="#fff" stroke="#e4d6cc" stroke-width="2" transform="rotate(12 76 34)"/><ellipse cx="33" cy="34" rx="7" ry="24" fill="#ffcad5" transform="rotate(-12 33 34)"/><ellipse cx="76" cy="34" rx="7" ry="24" fill="#ffcad5" transform="rotate(12 76 34)"/><ellipse cx="55" cy="92" rx="40" ry="35" fill="#fff" stroke="#e4d6cc" stroke-width="2"/><circle cx="40" cy="87" r="4" fill="#6d524b"/><circle cx="70" cy="87" r="4" fill="#6d524b"/><ellipse cx="29" cy="98" rx="9" ry="5" fill="#ffbdc8"/><ellipse cx="81" cy="98" rx="9" ry="5" fill="#ffbdc8"/><path d="M50 99 Q55 106 60 99" fill="none" stroke="#936a64" stroke-width="2" stroke-linecap="round"/><ellipse cx="55" cy="96" rx="4" ry="3" fill="#d8919b"/><rect x="33" y="110" width="44" height="21" rx="7" fill="#ff8fad" stroke="#f06b95" stroke-width="2"/><rect x="38" y="114" width="33" height="5" rx="3" fill="#ffffff70"/></symbol>
+<symbol id="bear" viewBox="0 0 110 135"><circle cx="27" cy="42" r="19" fill="#c88a65"/><circle cx="83" cy="42" r="19" fill="#c88a65"/><circle cx="27" cy="42" r="10" fill="#e9b9a0"/><circle cx="83" cy="42" r="10" fill="#e9b9a0"/><ellipse cx="55" cy="84" rx="45" ry="43" fill="#c88a65" stroke="#ad775a" stroke-width="2"/><circle cx="39" cy="79" r="4" fill="#5c433b"/><circle cx="71" cy="79" r="4" fill="#5c433b"/><ellipse cx="55" cy="94" rx="19" ry="15" fill="#ffe9d4"/><ellipse cx="55" cy="89" rx="7" ry="5" fill="#6b4940"/><path d="M55 94 Q48 103 44 96 M55 94 Q62 103 66 96" fill="none" stroke="#6b4940" stroke-width="2"/><rect x="32" y="111" width="46" height="20" rx="7" fill="#80bdf6" stroke="#5f9edb" stroke-width="2"/></symbol>
+</defs></svg>
+<section id="welcome" hidden><div class="welcome-card"><div class="welcome-blocks"><i></i><i></i><i></i><i></i></div><div class="eyebrow" style="margin-top:14px">A LITTLE EVERY DAY</div><h1>나만의<br>블록 도전!</h1><p>작은 미션이 모여 멋진 하루를 만들어요!</p><div class="welcome-art"><svg><use href="#rabbit"/></svg><svg><use href="#bear"/></svg></div><strong>이름을 알려주세요!</strong><input id="newName" maxlength="18" placeholder="이름 또는 별명" aria-label="이름 또는 별명"><button class="primary" onclick="addProfile()">이 이름으로 시작하기 ❯</button><div id="welcomeProfiles"></div><div class="welcome-caption">여러 아이의 도전판을 만들 수 있어요</div></div></section>
+<div id="app" hidden><header class="topbar"><div class="logo"><span class="logo-mark">✿</span>블록 도전</div><button class="pill" onclick="addAnother()">＋ 아이 추가 / 전환</button></header>
+<section class="hero"><div><div class="eyebrow">MY LITTLE CHALLENGE</div><h1 id="challengeTitle"></h1><p>작은 성공을 차곡차곡 쌓아봐!</p></div><div class="avatar"><svg width="47" height="51"><use href="#rabbit"/></svg></div></section><nav id="tabs" class="tabs" aria-label="아이 선택"></nav>
+<main class="main"><section class="card board-card"><div class="card-top"><h2>블록 쌓기</h2><span class="smalltag">나의 도전판</span></div><div class="scene"><div class="cloud"></div><div class="bubble">오늘도 멋지게 해냈어!<br>한 칸 더 채워볼까? ✨</div><svg class="bunny"><use href="#rabbit"/></svg></div><div class="board-wrap"><div id="board" class="board"></div><div class="progressline"><span id="stat">0 / 140</span><span id="percent">0%</span></div><div class="progressbar"><div id="progress"></div></div><div id="boardFoot" class="board-note"></div></div><button id="modeButton" class="mode-btn" onclick="toggleMode()">마지막 빈칸 채우기</button><p id="modeInfo" class="modeinfo"></p></section>
+<section class="card"><div class="card-top"><h2>오늘의 미션</h2><span id="helloName" class="smalltag"></span></div><div id="tasks"></div><button class="add-btn" onclick="addTask()">＋ 미션 추가하기</button><h2 class="section-gap">나의 보상</h2><div class="settings"><label for="goal">완료 횟수</label><input id="goal" type="number" min="1" max="9999" onchange="updateSettings()"><label for="prize">보상 내용</label><input id="prize" onchange="updateSettings()"></div><div id="reward" class="rewardbox"></div><div class="stats"><div class="statbox"><strong id="total">0번</strong><span>누적 미션 완료</span></div><div class="statbox"><strong id="boardsDone">0판</strong><span>새 판 시작 횟수</span></div></div><h2 class="section-gap">도전판 관리</h2><div class="actions"><button onclick="undo()">↶ 한 칸 취소</button><button onclick="newBoard()">↻ 새 판 시작</button><button onclick="renameProfile()">이름 변경</button></div><div class="actions"><button onclick="backup()">↓ 백업</button><button onclick="document.getElementById('restore').click()">↑ 복원</button></div><input type="file" id="restore" accept=".json,application/json" hidden onchange="restoreFile(event)"><p class="hint">같은 브라우저에서 자동 저장돼요. 기기를 바꾸기 전에는 백업해 주세요.</p><p id="history" class="history"></p></section></main>
+<nav class="bottom-nav"><button class="active" onclick="jumpTo(0)"><span>⌂</span>홈</button><button onclick="jumpTo(1)"><span>☑</span>미션</button><button onclick="jumpTo(2)"><span>☆</span>보상</button><button onclick="jumpTo(3)"><span>▥</span>기록</button></nav><footer class="footer">Little steps, colorful days</footer></div><div id="celebrate">✦</div>
+<script>
+
+
+const KEY='tetris_habits_family_v5',SHAPES=[
+[[0,0],[1,0],[2,0],[3,0]], // I horizontal
+[[0,0],[0,1],[0,2],[0,3]], // I vertical
+[[0,0],[1,0],[0,1],[1,1]], // O
+[[0,0],[1,0],[2,0],[1,1]], // T
+[[0,0],[0,1],[0,2],[1,1]],
+[[1,0],[0,1],[1,1],[2,1]],
+[[1,0],[0,1],[1,1],[1,2]],
+[[0,0],[1,0],[1,1],[2,1]], // Z
+[[1,0],[0,1],[1,1],[0,2]],
+[[1,0],[2,0],[0,1],[1,1]], // S
+[[0,0],[0,1],[1,1],[1,2]],
+[[0,0],[0,1],[0,2],[1,2]], // L
+[[0,0],[1,0],[2,0],[0,1]],
+[[0,0],[1,0],[1,1],[1,2]],
+[[2,0],[0,1],[1,1],[2,1]],
+[[1,0],[1,1],[1,2],[0,2]], // J
+[[0,0],[0,1],[1,0],[2,0]],
+[[0,0],[1,0],[0,1],[0,2]],
+[[0,0],[1,0],[2,0],[2,1]]
+],
+COLORS=['#ff728a','#ffbe43','#61cda3','#59a9f2','#b28af0','#ff9d58','#45cbd2','#ec78bd','#92c94e','#d17ad8','#e8a56d','#6c8ef1'];
+
+const NEW_KEY='block_challenge_playland_v1';
+let active=0, data;
+function makeKid(name){return {name,tasks:['책 읽기 15분','수학 공부','영어 공부','내 자리 정리'],goal:40,prize:'가족과 특별한 놀이',pieces:[],history:[],total:0,mode:'normal',pending:null,boardStart:0,boardsDone:0}}
+function normalizeKid(a){a.name=String(a.name||'친구').slice(0,18);a.tasks=Array.isArray(a.tasks)?a.tasks:['책 읽기'];a.pieces=Array.isArray(a.pieces)?a.pieces:[];a.history=Array.isArray(a.history)?a.history:[];a.total=Number(a.total)||0;a.mode=a.mode==='fill'?'fill':'normal';a.pending??=null;a.boardStart??=a.total-a.pieces.reduce((n,p)=>n+p.cells.length,0)-(a.pending?.progress||0);a.boardsDone??=0;return a}
+try{
+ data=JSON.parse(localStorage.getItem(NEW_KEY));
+ if(!data||!Array.isArray(data.kids))throw Error('new');
+ data.kids=data.kids.map(normalizeKid);
+}catch(e){
+ let old=null;
+ try{old=JSON.parse(localStorage.getItem('tetris_habits_family_v5'))}catch(e){}
+ data={kids:old&&Array.isArray(old.kids)?old.kids.map(normalizeKid):[],onboarded:!!old};
+}
+function k(){return data.kids[active]}
+function save(){try{localStorage.setItem(NEW_KEY,JSON.stringify(data))}catch(e){alert('저장 공간에 문제가 있어요. 기록을 백업해 주세요.')}}
+function switchKid(n){active=n;render()}
+function showWelcome(){document.getElementById('welcome').hidden=false;document.getElementById('app').hidden=true;renderWelcome()}
+function renderWelcome(){const el=document.getElementById('welcomeProfiles');el.replaceChildren();data.kids.forEach((p,i)=>{let b=document.createElement('button');b.className='profile-chip';b.textContent='✦ '+p.name;b.onclick=()=>{active=i;startApp()};el.append(b)})}
+function startApp(){data.onboarded=true;save();document.getElementById('welcome').hidden=true;document.getElementById('app').hidden=false;render()}
+function addProfile(){const input=document.getElementById('newName');const name=input.value.trim().slice(0,18);if(!name){input.focus();return}if(data.kids.length>=8){alert('프로필은 최대 8명까지 만들 수 있어요.');return}data.kids.push(makeKid(name));active=data.kids.length-1;input.value='';startApp()}
+function renameProfile(){const name=prompt('도전판에 표시할 이름을 입력해 주세요.',k().name);if(name===null)return;if(!name.trim())return;k().name=name.trim().slice(0,18);save();render()}
+function addAnother(){showWelcome();document.getElementById('newName').focus()}
+function filledMap(child){const map=new Map();for(const p of child.pieces)for(const [x,y] of p.cells)map.set(y*10+x,p.color);if(child.pending)for(const [x,y] of child.pending.cells.slice(0,child.pending.progress))map.set(y*10+x,child.pending.color);return map}
+function options(child){
+ const occupied=filledMap(child),out=[];
+ for(let si=0;si<SHAPES.length;si++){
+  const shape=SHAPES[si],w=Math.max(...shape.map(c=>c[0]))+1;
+  for(let x=0;x<=10-w;x++){
+   let landing=null;
+   for(let y=14;y>=0;y--){
+    const cells=shape.map(([dx,dy])=>[x+dx,y+dy]);
+    if(cells.every(([cx,cy])=>cy<14&&!occupied.has(cy*10+cx)))landing=cells;
+    else if(landing)break;
+   }
+   if(landing){
+    const heights=Array.from({length:10},(_,cx)=>{let h=0;for(let yy=13;yy>=0;yy--)if(occupied.has(yy*10+cx)){h=yy+1;break}return h});
+    const next=new Set([...occupied.keys(),...landing.map(([cx,cy])=>cy*10+cx)]);
+    let holes=0;for(let cx=0;cx<10;cx++){let seen=false;for(let yy=13;yy>=0;yy--){if(next.has(yy*10+cx))seen=true;else if(seen)holes++}}
+    let lines=0;for(let yy=0;yy<14;yy++)if(Array.from({length:10},(_,cx)=>next.has(yy*10+cx)).every(Boolean))lines++;
+    const highest=Math.max(...landing.map(c=>c[1]));
+    const score=lines*100-holes*14-highest*.2+Math.random()*5;
+    out.push({cells:landing,si,score});
+   }
+  }
+ }
+ return out;
+}
+function chooseColor(child,cells,exclude=null){
+ const neighbors=new Set(), map=filledMap(child);
+ for(const [x,y] of cells)for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]]){
+  const nx=x+dx,ny=y+dy;
+  if(nx>=0&&nx<10&&ny>=0&&ny<14){const c=map.get(ny*10+nx);if(c)neighbors.add(c)}
+ }
+ const choices=COLORS.filter(c=>!neighbors.has(c)&&c!==exclude);
+ const pool=choices.length?choices:COLORS.filter(c=>!neighbors.has(c));
+ return (pool.length?pool:COLORS)[Math.floor(Math.random()*(pool.length||COLORS.length))];
+}
+function recolorOldPieces(child){
+ // Reassign colors without moving or removing any saved cells.
+ const prior=child.pieces;
+ child.pieces=[];
+ for(const p of prior){
+  const color=chooseColor(child,p.cells,child.pieces.at(-1)?.color);
+  child.pieces.push({...p,color});
+ }
+ if(child.pending)child.pending.color=chooseColor(child,child.pending.cells);
+}
+function nextPiece(child){
+ const opts=options(child);if(!opts.length)return null;
+ opts.sort((a,b)=>b.score-a.score);
+ const pick=opts[Math.floor(Math.random()*Math.min(5,opts.length))];
+ // Fill cells bottom-first so each completed task visibly colors one square.
+ const color=chooseColor(child,pick.cells,child.pieces.at(-1)?.color);
+ return {cells:pick.cells.slice().sort((a,b)=>a[1]-b[1]||a[0]-b[0]),color,progress:0};
+}
+if(!data.colorSeparationVersion){
+ data.kids.forEach(recolorOldPieces);
+ data.colorSeparationVersion=2;
+ save();
+}
+function toggleMode(){const a=k();if(a.mode==='normal'&&options(a).length>0){if(!confirm('아직 테트리스 도형을 놓을 수 있어요. 빈칸 채우기는 마지막에만 사용하는 것을 추천해요. 그래도 전환할까요?'))return;}a.mode=a.mode==='normal'?'fill':'normal';save();render()}
+function complete(i){
+ const a=k(),task=a.tasks[i],at=new Date().toLocaleString('ko-KR'),map=filledMap(a);
+ if(map.size===140){alert('🎉 모든 칸을 완성했어요! 새 판 시작을 눌러주세요.');return}
+ if(a.mode==='fill'){
+   const empty=[];
+   for(let y=0;y<14;y++)for(let x=0;x<10;x++)if(!map.has(y*10+x))empty.push([x,y]);
+   if(!empty.length)return;
+   // Prefer cells completing the lowest row, with random choice within that row.
+   const low=empty[0][1],candidates=empty.filter(c=>c[1]===low);
+   const cell=candidates[Math.floor(Math.random()*candidates.length)];
+   a.pieces.push({cells:[cell],color:chooseColor(a,[cell]),single:true});
+   a.history.push({task,at,kind:'fill'});a.total++;
+ }else{
+   if(!a.pending)a.pending=nextPiece(a);
+   if(!a.pending){alert('4칸 도형을 놓을 공간이 없어요. 마지막 빈칸 채우기를 눌러주세요!');return}
+   a.pending.progress++;
+   a.history.push({task,at,kind:'piece'});a.total++;
+   if(a.pending.progress===4){a.pieces.push({cells:a.pending.cells,color:a.pending.color});a.pending=null}
+ }
+ save();render();
+}
+function undo(){
+ const a=k();if(!a.history.length||a.total<=a.boardStart){alert('현재 판에서 취소할 칸이 없어요.');return;}
+ if(!confirm('마지막으로 완료한 미션 한 칸을 취소할까요?'))return;
+ const last=a.history.pop();
+ if(last.kind==='fill'){a.pieces.pop()}
+ else if(a.pending&&a.pending.progress>0){a.pending.progress--;if(a.pending.progress===0)a.pending=null}
+ else{
+   const p=a.pieces.pop();
+   if(p)a.pending={cells:p.cells,color:p.color,progress:3};
+ }
+ a.total=Math.max(0,a.total-1);save();render();
+}
+function newBoard(){
+ if(!confirm('현재 테트리스판만 비울까요? 누적 완료 횟수와 기록은 유지돼요.'))return;
+ const a=k();a.pieces=[];a.pending=null;a.mode='normal';a.boardStart=a.total;a.boardsDone=(a.boardsDone||0)+1;save();render();
+}
+function addTask(){k().tasks.push('새로운 할 일');save();render()}
+function updateSettings(){k().goal=Math.max(1,parseInt(document.getElementById('goal').value)||1);k().prize=document.getElementById('prize').value;save();render()}
+
+function render(){
+ const a=k();if(!a)return showWelcome();
+ const tabs=document.getElementById('tabs');tabs.replaceChildren();
+ data.kids.forEach((p,i)=>{const btn=document.createElement('button');btn.className='kid-tab'+(i===active?' selected':'');btn.textContent=(i===active?'✦ ':'')+p.name;btn.onclick=()=>switchKid(i);tabs.append(btn)});
+ document.getElementById('challengeTitle').textContent=a.name+'의 블록 도전!';
+ document.getElementById('helloName').textContent=a.name;
+ const map=filledMap(a),owners=new Map(),board=document.getElementById('board');board.replaceChildren();
+ a.pieces.forEach((p,i)=>p.cells.forEach(([x,y])=>owners.set(y*10+x,i)));
+ if(a.pending)a.pending.cells.slice(0,a.pending.progress).forEach(([x,y])=>owners.set(y*10+x,'pending'));
+ for(let y=13;y>=0;y--)for(let x=0;x<10;x++){
+  const cell=document.createElement('div'),key=y*10+x,c=map.get(key),owner=owners.get(key);
+  cell.className='cell'+(c?' filled':'');
+  if(c){
+   cell.style.backgroundColor=c;
+   const edge=(nx,ny)=>nx<0||nx>=10||ny<0||ny>=14||owners.get(ny*10+nx)!==owner;
+   cell.style.borderTop=edge(x,y+1)?'2.5px solid #344568':'1px solid #ffffff80';
+   cell.style.borderBottom=edge(x,y-1)?'2.5px solid #344568':'1px solid #ffffff80';
+   cell.style.borderLeft=edge(x-1,y)?'2.5px solid #344568':'1px solid #ffffff80';
+   cell.style.borderRight=edge(x+1,y)?'2.5px solid #344568':'1px solid #ffffff80';
+  }
+  board.append(cell);
+ }
+ const count=map.size;document.getElementById('stat').textContent=count+' / 140';
+ document.getElementById('progress').style.width=(count/140*100)+'%';
+ document.getElementById('percent').textContent=Math.round(count/140*100)+'%';
+ document.getElementById('boardFoot').textContent=a.pending?'이번 블록 '+a.pending.progress+' / 4칸 완성 중':'미션을 완료하면 블록이 쌓여요!';
+ document.getElementById('total').textContent=a.total+'번';
+ document.getElementById('boardsDone').textContent=(a.boardsDone||0)+'판';
+ const mode=document.getElementById('modeButton');mode.textContent=a.mode==='fill'?'✓ 빈칸 채우는 중 · 일반 모드로':'🧩 마지막 빈칸 채우기';
+ mode.classList.toggle('on',a.mode==='fill');
+ document.getElementById('modeInfo').textContent=a.mode==='fill'?'미션 한 번에 남은 빈칸 하나를 채워요.':'미션 한 번에 도형 한 칸씩! 4칸이면 하나의 블록이 완성돼요.';
+ const tasks=document.getElementById('tasks');tasks.replaceChildren();
+ a.tasks.forEach((task,i)=>{
+  const row=document.createElement('div');row.className='task';
+  const icon=document.createElement('span');icon.className='task-icon';icon.textContent=['☀','✦','♥','★','✿','◆'][i%6];
+  const input=document.createElement('input');input.value=task;input.setAttribute('aria-label','미션 이름');input.onchange=()=>{a.tasks[i]=input.value;save()};
+  const done=document.createElement('button');done.className='complete-btn';done.textContent='✓ 완료';done.onclick=()=>{complete(i);const flash=document.getElementById('celebrate');flash.classList.remove('pop');void flash.offsetWidth;flash.classList.add('pop')};
+  const del=document.createElement('button');del.className='remove-btn';del.textContent='×';del.setAttribute('aria-label','미션 삭제');del.onclick=()=>{if(confirm('이 미션을 삭제할까요?')){a.tasks.splice(i,1);save();render()}};
+  row.append(icon,input,done,del);tasks.append(row);
+ });
+ document.getElementById('goal').value=a.goal;document.getElementById('prize').value=a.prize;
+ const achieved=a.total>=a.goal;
+ document.getElementById('reward').textContent=achieved?'🎉 목표 달성! '+a.prize:'앞으로 '+Math.max(0,a.goal-a.total)+'번 더 완료하면 '+a.prize+'!';
+ document.getElementById('history').textContent=a.history.length?'최근 완료 · '+a.history.slice(-4).reverse().map(h=>h.task).join(' · '):'첫 번째 미션을 완료해 볼까요?';
+ if(count===140&&!a.celebrated){a.celebrated=true;save();setTimeout(()=>alert('🎉 '+a.name+'의 블록 도전 성공! 140칸을 모두 채웠어요! 새 판을 시작해 보세요.'),200)}
+ if(count<140&&a.celebrated){a.celebrated=false;save()}
+}
+
+function backup(){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='블록도전_기록백업.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+async function restoreFile(e){
+ const file=e.target.files[0];if(!file)return;
+ try{
+  const obj=JSON.parse(await file.text());
+  if(!Array.isArray(obj.kids)||!obj.kids.length||!obj.kids.every(x=>Array.isArray(x.pieces)&&Array.isArray(x.tasks)))throw Error();
+  if(confirm('현재 기록을 백업 파일로 교체할까요?')){
+   data={kids:obj.kids.map(normalizeKid),onboarded:true};active=0;save();startApp();
+  }
+ }catch(e){alert('올바른 백업 파일이 아니에요.')}
+ e.target.value='';
+}
+document.getElementById('newName').addEventListener('keydown',e=>{if(e.key==='Enter')addProfile()});
+function jumpTo(n){
+ document.querySelectorAll('.bottom-nav button').forEach((b,i)=>b.classList.toggle('active',i===n));
+ const target=n===0?document.querySelector('.hero'):n===1?document.getElementById('tasks'):n===2?document.getElementById('reward'):document.querySelector('.stats');
+ if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+}
+if(data.kids.length&&data.onboarded)startApp();else showWelcome();
+
+
+</script></body></html>
